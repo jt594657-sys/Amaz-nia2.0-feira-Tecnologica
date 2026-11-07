@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Amazônia 2.0 // Feira Tecnológica FUCAPI</title>
+    
+    <!-- Meta tags PWA e Mobile Web App -->
+    <meta name="theme-color" content="#020617">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Amazônia 2.0">
+    <meta name="application-name" content="Amazônia 2.0">
+    <meta name="description" content="Portal Biométrico e Holográfico de Conservação da Fauna Amazônica da Feira Tecnológica FUCAPI.">
+    
+    <!-- Manifest Embutido via Data URI -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Amazônia 2.0 - FUCAPI","short_name":"Amazônia 2.0","start_url":".","display":"standalone","background_color":"#020617","theme_color":"#020617","orientation":"any","icons":[{"src":"https://placehold.co/192x192/020617/00f2fe?text=AMAZON","sizes":"192x192","type":"image/png"}]}'>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'holo-cyan': '#00f2fe',
+                        'holo-emerald': '#10b981',
+                        'holo-rose': '#f43f5e',
+                        'holo-amber': '#f59e0b',
+                        'holo-purple': '#a855f7',
+                        'holo-border': 'rgba(0, 242, 254, 0.25)',
+                        'holo-panel': 'rgba(15, 23, 42, 0.92)'
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CSS Customizado & Efeitos Cyberpunk / Holográficos */
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #020617;
+            overflow-x: hidden;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Scanlines CRT Cyberpunk */
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
+            z-index: 20;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        .holo-glow {
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+        }
+
+        .holo-glow-danger {
+            box-shadow: 0 0 35px rgba(244, 63, 94, 0.5);
+        }
+
+        /* Feixe de Varredura Laser */
+        .scanner-beam {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00f2fe, #ffffff, #00f2fe, transparent);
+            box-shadow: 0 0 15px #00f2fe;
+            animation: scan 4s ease-in-out infinite alternate;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .scanner-beam.danger {
+            background: linear-gradient(90deg, transparent, #f43f5e, #ffffff, #f43f5e, transparent);
+            box-shadow: 0 0 20px #f43f5e;
+            animation-duration: 1.2s;
+        }
+
+        @keyframes scan {
+            0% { top: 2%; opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { top: 96%; opacity: 0.3; }
+        }
+
+        /* Animações de Holograma */
+        @keyframes float-hologram {
+            0%, 100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 20px rgba(0,242,254,0.4)); }
+            50% { transform: translateY(-12px) scale(1.03); filter: drop-shadow(0 0 30px rgba(0,242,254,0.7)); }
+        }
+
+        @keyframes attack-shake {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            15% { transform: scale(1.15) rotate(-6deg) translateX(-5px); }
+            30% { transform: scale(1.1) rotate(6deg) translateX(5px); }
+            45% { transform: scale(1.2) rotate(-8deg); }
+            60% { transform: scale(1.12) rotate(4deg); }
+            75% { transform: scale(1.18) rotate(-2deg); }
+        }
+
+        .avatar-float {
+            animation: float-hologram 4s ease-in-out infinite;
+        }
+
+        .avatar-aggressive {
+            animation: attack-shake 0.45s ease-in-out infinite;
+        }
+
+        /* Scrollbar Futurista */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.9);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 242, 254, 0.4);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 242, 254, 0.8);
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 20s linear infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative scanlines flex flex-col justify-between selection:bg-holo-cyan selection:text-slate-950 bg-slate-950 text-slate-100">
+
+    <!-- Canvas de fundo bioluminescente -->
+    <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- Header Principal -->
+    <header class="relative z-30 border-b border-holo-border bg-holo-panel backdrop-blur-md px-4 md:px-6 py-3 flex flex-wrap items-center justify-between gap-3 shadow-2xl">
+        <div class="flex items-center space-x-3">
+            <div id="brand-logo" class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-cyan-950/90 border border-holo-cyan flex items-center justify-center text-holo-cyan holo-glow transition-all duration-300">
+                <i class="fa-solid fa-earth-americas text-lg md:text-2xl animate-spin-slow"></i>
+            </div>
+            <div>
+                <h1 class="font-orbitron font-black text-base md:text-xl tracking-widest text-white flex items-center gap-2">
+                    AMAZÔNIA 2.0 <span class="text-xs text-holo-cyan font-semibold hidden sm:inline">// FUCAPI</span>
+                </h1>
+                <p class="text-[10px] md:text-xs text-cyan-400 font-rajdhani tracking-widest font-bold uppercase flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    Biometria, Telemetria &amp; Conservação Digital
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 md:gap-3 text-xs font-orbitron flex-wrap">
+            <button type="button" id="open-stats-btn" class="px-3 py-2 rounded-xl bg-purple-950/80 border border-holo-purple text-purple-300 hover:bg-holo-purple hover:text-white transition-all font-bold flex items-center gap-2 shadow-lg active:scale-95">
+                <i class="fa-solid fa-chart-line text-xs"></i>
+                <span class="hidden md:inline">BIOMA STATS</span>
+            </button>
+
+            <button type="button" id="open-compare-modal-btn" class="px-3 py-2 rounded-xl bg-amber-950/80 border border-holo-amber text-amber-300 hover:bg-holo-amber hover:text-slate-950 transition-all font-bold flex items-center gap-2 shadow-lg active:scale-95">
+                <i class="fa-solid fa-code-compare text-xs"></i>
+                <span class="hidden md:inline">COMPARAR</span>
+            </button>
+
+            <button type="button" id="open-telemetry-modal-btn" class="px-3 py-2 rounded-xl bg-cyan-950/90 border border-holo-cyan text-holo-cyan hover:bg-holo-cyan hover:text-slate-950 transition-all font-bold flex items-center gap-2 shadow-lg active:scale-95">
+                <i class="fa-solid fa-square-poll-vertical text-xs"></i>
+                <span class="hidden sm:inline">RAIO-X</span>
+            </button>
+
+            <button type="button" id="audio-toggle-btn" class="px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-200 hover:border-holo-cyan hover:text-holo-cyan transition-all font-bold flex items-center gap-2 shadow-lg active:scale-95">
+                <i class="fa-solid fa-volume-high text-sm text-holo-cyan" id="audio-icon"></i>
+                <span id="audio-txt" class="hidden sm:inline">SOM: ON</span>
+            </button>
+            
+            <button type="button" id="mobile-menu-btn" class="lg:hidden px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-200 hover:text-holo-cyan active:scale-95">
+                <i class="fa-solid fa-sliders text-base"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Barra de Métricas do Bioma -->
+    <div id="biome-stats-bar" class="hidden z-20 bg-slate-900/95 border-b border-holo-purple px-4 py-3 font-orbitron text-xs text-slate-300 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-2 text-holo-purple font-bold">
+                <i class="fa-solid fa-network-wire"></i> SENSORIAIS DA BACIA AMAZÔNICA
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center w-full md:w-auto">
+                <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+                    <div class="text-[10px] text-slate-400">BIODIVERSIDADE</div>
+                    <div class="text-holo-cyan font-bold text-sm">96.2 / 100</div>
+                </div>
+                <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+                    <div class="text-[10px] text-slate-400">RISCO GLOBAL BIOMA</div>
+                    <div class="text-holo-amber font-bold text-sm">ALERTA MODERADO</div>
+                </div>
+                <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+                    <div class="text-[10px] text-slate-400">ESPÉCIES MONITORADAS</div>
+                    <div class="text-holo-rose font-bold text-sm">40 ESPÉCIMES</div>
+                </div>
+                <div class="bg-slate-950/80 p-2 rounded-lg border border-slate-800">
+                    <div class="text-[10px] text-slate-400">FAVORITOS SALVOS</div>
+                    <div class="text-holo-emerald font-bold text-sm" id="stats-fav-count">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <main class="relative z-10 flex-1 max-w-7xl w-full mx-auto p-3 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+        
+        <!-- Painel Esquerdo -->
+        <section id="sidebar-panel" class="lg:col-span-3 flex flex-col gap-3">
+            <div class="bg-holo-panel border border-holo-border rounded-2xl p-4 backdrop-blur-md shadow-2xl">
+                
+                <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
+                    <h2 class="font-orbitron text-xs text-holo-cyan tracking-widest flex items-center gap-2 font-bold">
+                        <i class="fa-solid fa-dna text-sm"></i> ESPÉCIMES (<span id="total-animals-count">40</span>)
+                    </h2>
+                    <span class="text-[9px] bg-cyan-950 text-holo-cyan px-2 py-0.5 rounded-full border border-cyan-800/60 font-orbitron font-semibold">LIVE DATA</span>
+                </div>
+
+                <div id="attack-countdown" class="text-xs font-orbitron text-emerald-400 mb-3 text-center bg-slate-900/90 py-2 rounded-xl border border-emerald-500/30 transition-all duration-300 shadow-inner flex items-center justify-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>MODO CALMO ATIVO</span>
+                </div>
+
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80 space-y-2 mb-3">
+                    <button type="button" id="tour-btn" class="w-full py-2 bg-cyan-950 border border-holo-cyan text-holo-cyan hover:bg-holo-cyan hover:text-slate-950 rounded-xl font-orbitron text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-md active:scale-95">
+                        <i class="fa-solid fa-play text-xs" id="tour-icon"></i>
+                        <span id="tour-btn-text">INICIAR VISITA GUIADA</span>
+                    </button>
+                    
+                    <div class="flex items-center justify-between gap-1.5">
+                        <button type="button" id="prev-btn" class="p-2 bg-slate-800 hover:bg-slate-700 text-holo-cyan rounded-lg text-xs transition-colors flex-1 flex justify-center items-center active:scale-95" title="Anterior">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <span id="guide-progress" class="text-[11px] font-orbitron text-slate-300 px-2 font-bold">1 / 40</span>
+                        <button type="button" id="next-btn" class="p-2 bg-slate-800 hover:bg-slate-700 text-holo-cyan rounded-lg text-xs transition-colors flex-1 flex justify-center items-center active:scale-95" title="Próximo">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button type="button" id="read-aloud-btn" class="px-3 py-2 bg-emerald-950/90 border border-holo-emerald text-holo-emerald hover:bg-holo-emerald hover:text-slate-950 rounded-lg text-[11px] font-orbitron font-bold flex items-center gap-1.5 transition-all shadow-md active:scale-95" title="Ouvir Narração por Voz">
+                            <i class="fa-solid fa-volume-high"></i>
+                            <span>OUVIR</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative mb-2">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-400"></i>
+                    <input type="text" id="search-input" placeholder="Filtrar por nome ou bioma..." class="w-full bg-slate-900 border border-slate-800 text-slate-200 text-xs rounded-xl pl-8 pr-3 py-2 focus:outline-none focus:border-holo-cyan font-rajdhani transition-all">
+                </div>
+
+                <!-- Filtros por Categoria -->
+                <div class="flex items-center gap-1 overflow-x-auto pb-2 mb-2 text-[10px] font-orbitron">
+                    <button type="button" data-filter="all" class="filter-btn px-2 py-1 rounded-lg bg-holo-cyan text-slate-950 font-bold whitespace-nowrap">TODOS</button>
+                    <button type="button" data-filter="floresta" class="filter-btn px-2 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-holo-cyan whitespace-nowrap">FLORESTA</button>
+                    <button type="button" data-filter="rio" class="filter-btn px-2 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-holo-cyan whitespace-nowrap">RIOS</button>
+                    <button type="button" data-filter="dossel" class="filter-btn px-2 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-holo-cyan whitespace-nowrap">DOSSEL</button>
+                    <button type="button" data-filter="serapilheira" class="filter-btn px-2 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-holo-cyan whitespace-nowrap">SERAPILHEIRA</button>
+                    <button type="button" data-filter="fav" class="filter-btn px-2 py-1 rounded-lg bg-slate-800 text-amber-400 hover:text-amber-300 whitespace-nowrap flex items-center gap-1"><i class="fa-solid fa-star text-[9px]"></i> FAVS</button>
+                </div>
+
+                <!-- Lista de Animais -->
+                <div id="animal-list" class="flex flex-col gap-2 max-h-[340px] lg:max-h-[420px] overflow-y-auto pr-1">
+                    <!-- Gerado Dinamicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Painel Central -->
+        <section class="lg:col-span-6 flex flex-col items-center justify-center relative w-full">
+            <div id="chamber-container" class="w-full relative bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-cyan-950/40 border border-holo-border rounded-3xl p-4 md:p-6 holo-glow flex flex-col items-center justify-between min-h-[460px] md:min-h-[540px] overflow-hidden transition-all duration-500">
+                
+                <div class="scanner-beam" id="scanner-beam"></div>
+                
+                <!-- Badges e Botão de Ativação do Modo Flutuante -->
+                <div class="w-full flex justify-between items-center z-10 text-[11px] font-orbitron gap-2 flex-wrap">
+                    <div class="bg-slate-950/90 border border-holo-cyan/60 px-3 py-1 rounded-full text-holo-cyan flex items-center gap-2 shadow">
+                        <i class="fa-solid fa-fingerprint text-xs"></i> 
+                        <span id="specimen-id-badge">ID: AMAZON-01</span>
+                    </div>
+
+                    <button type="button" id="toggle-ecosystem-mode-btn" class="hidden bg-purple-950 border border-holo-purple text-holo-purple px-3 py-1 rounded-full font-bold hover:bg-holo-purple hover:text-white transition-all shadow active:scale-95">
+                        <i class="fa-solid fa-cubes-stacked"></i> ECOSSISTEMA VIVO
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="fav-toggle-btn" class="p-2 rounded-full bg-slate-950/90 border border-amber-500/50 text-slate-500 hover:text-amber-400 transition-colors shadow" title="Favoritar Espécime">
+                            <i class="fa-solid fa-star text-sm"></i>
+                        </button>
+
+                        <div id="habitat-badge-container" class="bg-emerald-950/90 border border-emerald-500/60 px-3 py-1 rounded-full text-holo-emerald flex items-center gap-1.5 shadow transition-colors duration-300">
+                            <i class="fa-solid fa-tree text-xs"></i>
+                            <span id="specimen-status-badge">HÁBITAT: FLORESTA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo Visual Holográfico ou Container Flutuante Vivo -->
+                <div id="main-visual-area" class="w-full relative flex-1 flex flex-col items-center justify-center my-4 min-h-[260px]">
+                    
+                    <!-- Display Padrão do Espécime -->
+                    <div id="single-specimen-view" class="text-center relative z-10 w-full flex flex-col items-center justify-center">
+                        <div id="portal-glow" class="absolute w-48 h-48 md:w-64 md:h-64 rounded-full bg-holo-cyan/10 blur-2xl transition-all duration-500 pointer-events-none"></div>
+
+                        <button type="button" id="action-trigger-btn" class="relative z-10 flex flex-col items-center cursor-pointer active:scale-95 transition-transform duration-200 select-none group focus:outline-none" title="Clique para alterar comportamento">
+                            <div id="animal-avatar-container" class="avatar-float text-8xl md:text-9xl transition-all duration-300 drop-shadow-[0_0_25px_rgba(0,242,254,0.5)] my-2">
+                                <span class="animal-emoji" id="animal-emoji-glyph">🐆</span>
+                            </div>
+                            
+                            <div id="eco-action-tag" class="mt-4 bg-cyan-950/90 border border-holo-cyan text-holo-cyan px-5 py-2 rounded-full text-xs font-orbitron tracking-wider shadow-2xl flex items-center gap-2.5 transition-all duration-300 group-hover:bg-holo-cyan group-hover:text-slate-950">
+                                <i class="fa-solid fa-bolt text-holo-amber" id="action-icon"></i>
+                                <span id="tag-instruction-text" class="font-bold">TOQUE PARA MODO DEFESA / ALERTA</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Container do Modo Flutuante Ecossistema Vivo -->
+                    <div id="floating-ecosystem-view" class="hidden absolute inset-0 w-full h-full overflow-hidden rounded-2xl bg-slate-950/60 border border-holo-purple/30">
+                        <!-- Bolhas de animais geradas via JS -->
+                    </div>
+
+                </div>
+
+                <!-- Detalhes do Espécime Selecionado -->
+                <div class="w-full text-center z-10 bg-slate-950/85 border border-slate-800/90 rounded-2xl p-4 backdrop-blur-md shadow-xl transition-all duration-300">
+                    <div class="flex items-center justify-center gap-2 mb-1 flex-wrap">
+                        <h3 id="specimen-name" class="font-orbitron font-extrabold text-xl md:text-2xl text-white tracking-wider">Onça-Pintada</h3>
+                        <span id="status-tag" class="text-[10px] font-orbitron font-bold px-2.5 py-0.5 rounded-full bg-amber-950/80 text-amber-400 border border-amber-500/40">VULNERÁVEL</span>
+                    </div>
+                    
+                    <p id="specimen-scientific" class="text-xs text-holo-cyan italic font-rajdhani font-semibold tracking-wider mb-2">
+                        Panthera onca // Predador Ápice
+                    </p>
+                    
+                    <div class="text-xs md:text-sm text-slate-300 font-rajdhani leading-relaxed max-w-xl mx-auto font-medium" id="specimen-desc">
+                        Regula populações de herbívoros mantendo o equilíbrio dinâmico e a renovação vegetacional das florestas tropicais.
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Painel Direito -->
+        <section class="lg:col-span-3 flex flex-col gap-4">
+            
+            <div class="bg-holo-panel border border-holo-border rounded-2xl p-4 backdrop-blur-md shadow-2xl">
+                <h2 class="font-orbitron text-xs text-holo-cyan tracking-widest mb-3 flex items-center gap-2 font-bold">
+                    <i class="fa-solid fa-chart-simple"></i> TELEMETRIA ESTRUTURAL
+                </h2>
+                
+                <div class="space-y-3 font-rajdhani text-sm">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1 font-semibold">
+                            <span class="text-slate-400">PRESSÃO SONORA (dB)</span>
+                            <span id="telemetry-sound-power" class="text-holo-rose font-bold font-orbitron">108.5 dB</span>
+                        </div>
+                        <div class="w-full bg-slate-900 rounded-full h-2.5 border border-slate-800/80 overflow-hidden">
+                            <div id="bar-sound" class="bg-gradient-to-r from-amber-500 to-holo-rose h-2.5 rounded-full transition-all duration-500 w-[80%]"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between text-xs mb-1 font-semibold">
+                            <span class="text-slate-400">SAÚDE ECOSSISTÊMICA</span>
+                            <span id="telemetry-health" class="text-holo-emerald font-bold font-orbitron">98.4%</span>
+                        </div>
+                        <div class="w-full bg-slate-900 rounded-full h-2.5 border border-slate-800/80 overflow-hidden">
+                            <div id="bar-health" class="bg-gradient-to-r from-cyan-500 to-holo-emerald h-2.5 rounded-full transition-all duration-500 w-[95%]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-holo-panel border border-holo-border rounded-2xl p-4 backdrop-blur-md shadow-2xl">
+                <h2 class="font-orbitron text-xs text-holo-cyan tracking-widest mb-2 flex items-center gap-2 font-bold">
+                    <i class="fa-solid fa-bullseye"></i> PAPEL ECOLÓGICO
+                </h2>
+                <div id="ecological-role-box" class="bg-slate-950/90 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 font-rajdhani leading-relaxed min-h-[85px] flex items-center font-medium">
+                    Carregando dados biológicos...
+                </div>
+            </div>
+
+            <div class="bg-holo-panel border border-holo-border rounded-2xl p-4 backdrop-blur-md shadow-2xl">
+                <h2 class="font-orbitron text-xs text-holo-cyan tracking-widest mb-2 flex items-center gap-2 font-bold">
+                    <i class="fa-solid fa-leaf text-holo-emerald"></i> PRESERVAÇÃO AMBIENTAL
+                </h2>
+                <p id="conservation-tip" class="font-rajdhani text-xs text-slate-300 leading-relaxed font-medium">
+                    Carregando diretrizes de conservação...
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL RAIO-X TELEMETRIA -->
+    <div id="telemetry-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-holo-cyan rounded-3xl max-w-2xl w-full p-6 relative holo-glow shadow-2xl font-orbitron">
+            <button type="button" id="close-telemetry-modal-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-6 pb-3 border-b border-slate-800">
+                <i class="fa-solid fa-microchip text-holo-cyan text-2xl"></i>
+                <div>
+                    <h3 class="text-lg text-white font-bold tracking-wider">RAIO-X DE TELEMETRIA BIOMÉTRICA</h3>
+                    <p class="text-xs text-cyan-400 font-rajdhani" id="telemetry-modal-subtitle">Análise avançada de vetores ambientais</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-rajdhani text-sm mb-6" id="telemetry-metrics-grid">
+                <!-- Inserido dinamicamente -->
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 text-xs text-slate-300 leading-relaxed font-rajdhani">
+                <span class="text-holo-cyan font-bold font-orbitron">DIAGNÓSTICO DO SENSOR:</span>
+                <p id="telemetry-modal-diag">Carregando análise biométrica...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COMPARADOR DE ESPÉCIMES -->
+    <div id="compare-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-holo-amber rounded-3xl max-w-4xl w-full p-6 relative shadow-2xl font-orbitron max-h-[90vh] overflow-y-auto">
+            <button type="button" id="close-compare-modal-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800">
+                <i class="fa-solid fa-code-compare text-holo-amber text-2xl"></i>
+                <div>
+                    <h3 class="text-lg text-white font-bold tracking-wider">COMPARADOR DE ESPÉCIMES AMAZÔNICOS</h3>
+                    <p class="text-xs text-amber-400 font-rajdhani">Selecione dois animais para análise pareada</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <label class="text-xs text-holo-cyan block mb-2 font-bold">ESPÉCIME A</label>
+                    <select id="compare-select-1" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-2 font-rajdhani mb-3 focus:outline-none focus:border-holo-cyan">
+                    </select>
+                    <div id="compare-card-1" class="space-y-2 font-rajdhani text-xs text-slate-300"></div>
+                </div>
+
+                <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                    <label class="text-xs text-holo-amber block mb-2 font-bold">ESPÉCIME B</label>
+                    <select id="compare-select-2" class="w-full bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-xl p-2 font-rajdhani mb-3 focus:outline-none focus:border-holo-amber">
+                    </select>
+                    <div id="compare-card-2" class="space-y-2 font-rajdhani text-xs text-slate-300"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="relative z-30 border-t border-holo-border bg-holo-panel backdrop-blur-md px-6 py-3 text-center text-xs text-slate-300 font-orbitron flex flex-wrap justify-between items-center gap-4">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-microchip text-holo-cyan"></i>
+            <span>FEIRA TECNOLÓGICA // FUCAPI - AMAZÔNIA 2.0</span>
+        </div>
+        <div class="text-[11px] text-slate-400 font-rajdhani">
+            Desenvolvido para Exibição Interativa e Conservação da Fauna Amazônica
+        </div>
+    </footer>
+
+    <!-- Lógica JavaScript -->
+    <script>
+        // --- BASE DE DADOS COMPLETA COM 40 ESPÉCIMES DA AMAZÔNIA (10 POR HÁBITAT) ---
+        const speciesData = [
+            // --- FLORESTA (10) ---
+            { id: "JAGUAR-01", name: "Onça-Pintada", scientific: "Panthera onca", habitat: "FLORESTA DENSA & VÁRZEA", category: "floresta", status: "Quase Ameaçada", soundPower: 108.5, healthImpact: 98.4, sensitivity: 78, territoryCover: 85, emoji: "🐆", calmDesc: "Regula populações de herbívoros mantendo o equilíbrio dinâmico e a renovação vegetacional das florestas tropicais.", aggressiveDesc: "ALERTA DE ATAQUE: Emite esturro grave e reverberante para assustar rivais e defender seu território de caça.", ecologicalRole: "Predador topo de cadeia das Américas. Controla populações de mamíferos terrestres e impede a superpopulação de presas.", conservationTip: "Apoie os corredores ecológicos que conectam áreas florestais contínuas no ecossistema amazônico.", synthType: "felino_grande" },
+            { id: "TAPIR-02", name: "Anta-Brasileira", scientific: "Tapirus terrestris", habitat: "MATA DE TERRA FIRME", category: "floresta", status: "Vulnerável", soundPower: 75.0, healthImpact: 95.2, sensitivity: 82, territoryCover: 70, emoji: "🦛", calmDesc: "Maior mamífero terrestre da América do Sul, essencial para o transporte de sementes pela floresta.", aggressiveDesc: "CHAMADO DE ALERTA: Assobio agudo e penetrante ao notar presença de ameaças em sua rota.", ecologicalRole: "Jardineira da floresta. Dispersa sementes grandes em longas distâncias fertilizando o solo florestal.", conservationTip: "Evite a fragmentação florestal e a construção de rodovias sem passagens de fauna.", synthType: "mamifero_grande" },
+            { id: "PUMA-03", name: "Suçuarana (Puma)", scientific: "Puma concolor", habitat: "FLORESTAS E SAVANAS", category: "floresta", status: "Pouco Preocupante", soundPower: 102.0, healthImpact: 96.0, sensitivity: 80, territoryCover: 92, emoji: "🦁", calmDesc: "Felino ágil e adaptável capaz de dar saltos impressionantes e percorrer grandes extensão territoriais.", aggressiveDesc: "ROSNADO TERRITORIAL: Emite uivos e sibilados defensivos de alta intensidade sonora.", ecologicalRole: "Mesopredador fundamental na regulação de mamíferos de médio porte.", conservationTip: "Mantenha grandes áreas protegidas contínuas para evitar conflitos com populações humanas.", synthType: "felino_medio" },
+            { id: "JAGUATIRICA-04", name: "Jaguatirica", scientific: "Leopardus pardalis", habitat: "FLORESTA TROPICAL DENSAS", category: "floresta", status: "Pouco Preocupante", soundPower: 86.0, healthImpact: 94.0, sensitivity: 75, territoryCover: 60, emoji: "🐅", calmDesc: "Pequeno felino com pelagem altamente camuflada que caça à noite na vegetação rasteira.", aggressiveDesc: "MIADO DE AMEAÇA: Mados curtos e roucos indicando prontidão para retaliação.", ecologicalRole: "Controle biológico de roedores e peçonhentos na serapilheira e arbustos baixos.", conservationTip: "Proteja as matas ciliares que servem de rota de deslocamento noturno.", synthType: "felino_pequeno" },
+            { id: "TAMANDUA-05", name: "Tamanduá-Bandeira", scientific: "Myrmecophaga tridactyla", habitat: "CAMPOS E FLORESTAS", category: "floresta", status: "Vulnerável", soundPower: 68.0, healthImpact: 93.5, sensitivity: 88, territoryCover: 65, emoji: "🦡", calmDesc: "Alimenta-se exclusivamente de formigas e cupins usando sua língua pegajosa de meio metro.", aggressiveDesc: "POSTURA DE DEFESA: Ergue-se nas patas traseiras e finca suas garras afiadas contra o agressor.", ecologicalRole: "Controlador natural de insetos euglossinos e formigueiros gigantes.", conservationTip: "Previna queimadas que destroem seu hábitat alimentar rasteiro.", synthType: "bufado" },
+            { id: "QUEIXADA-06", name: "Queixada", scientific: "Tayassu pecari", habitat: "FLORESTA TROPICAL densa", category: "floresta", status: "Vulnerável", soundPower: 94.0, healthImpact: 97.0, sensitivity: 70, territoryCover: 88, emoji: "🐗", calmDesc: "Anda em grandes varas de centenas de indivíduos revirando o solo florestal.", aggressiveDesc: "BATE-QUEIXO: Estalhar forte dos dentes caninos forming um coro assustador.", ecologicalRole: "Revira a serapilheira e promove a aeração do solo e germinação de sementes.", conservationTip: "Coíba a caça predatória de grandes grupos familiares.", synthType: "estalido" },
+            { id: "TATU-07", name: "Tatu-Canastra", scientific: "Priodontes maximus", habitat: "MATA DE TERRA FIRME", category: "floresta", status: "Vulnerável", soundPower: 62.0, healthImpact: 96.8, sensitivity: 90, territoryCover: 78, emoji: "🛡️", calmDesc: "O maior tatu do mundo, construtor de túneis profundos que servem de abrigo para várias espécies.", aggressiveDesc: "GRUNHIDO SUBTERRÂNEO: Escava rapidamente lançando terra e emitindo roncos abafados.", ecologicalRole: "Engenheiro de ecossistemas. Suas tocas abandonadas abrigam mais de 20 espécies silvestres.", conservationTip: "Evite a eliminação do solo natural em favor de monoculturas.", synthType: "raspado" },
+            { id: "CERVO-08", name: "Cervo-do-Pantanal", scientific: "Blastocerus dichotomus", habitat: "VÁRZEAS UMIDAS", category: "floresta", status: "Vulnerável", soundPower: 72.0, healthImpact: 91.0, sensitivity: 85, territoryCover: 55, emoji: "🦌", calmDesc: "Maior cervídeo da América do Sul com cascos adaptados para caminhar em solos alagados.", aggressiveDesc: "BRAMIDO DE ALERTA: Emite ganidos graves para avisar o bando sobre predadores.", ecologicalRole: "Herbívoro de várzea que consome vegetação semiaquática controlando plantas invasoras.", conservationTip: "Preserve as áreas úmidas e margens de rios sem represamentos.", synthType: "mamifero_grande" },
+            { id: "CACHORRO-09", name: "Cachorro-do-Mato-Vinheró", scientific: "Speothos venaticus", habitat: "FLORESTA DE TERRA FIRME", category: "floresta", status: "Quase Ameaçada", soundPower: 78.0, healthImpact: 92.4, sensitivity: 86, territoryCover: 80, emoji: "🐕", calmDesc: "Canídeo silvestre raro que caça em matilhas perfeitamente coordenadas nas densas matas.", aggressiveDesc: "LATIDO AGUDO: Vocalizações sibilantes em grupo para cercar presas grandes.", ecologicalRole: "Predador de pacas e cotias garantindo o equilíbrio demográfico de roedores.", conservationTip: "Evite a transmissão de doenças de cães domésticos para a fauna nativa.", synthType: "latido_agudo" },
+            { id: "PACARANA-10", name: "Pacarana", scientific: "Dinomys branickii", habitat: "ENCOSTAS FLORESTAIS", category: "floresta", status: "Vulnerável", soundPower: 58.0, healthImpact: 89.5, sensitivity: 94, territoryCover: 40, emoji: "🐹", calmDesc: "Roedor gigante raro de movimentos lentos que habita cavidades em rochas e raízes.", aggressiveDesc: "CHAMADO SECO: Estalos de dentes e chiados nasais para intimidar invasores de toca.", ecologicalRole: "Herbívoro especialista em brotos macios e frutos de árvores nativas.", conservationTip: "Proteja as áreas montanhosas e encostas florestadas da bacia.", synthType: "estalido" },
+
+            // --- RIOS & LAGOS (10) ---
+            { id: "BOTO-02", name: "Boto-Cor-de-Rosa", scientific: "Inia geoffrensis", habitat: "BACIA DO RIO AMAZONAS", category: "rio", status: "Em Perigo", soundPower: 88.2, healthImpact: 92.0, sensitivity: 92, territoryCover: 90, emoji: "🐬", calmDesc: "Utiliza biossonar de alta frequência para navegar nas matas inundadas (igapós) durante as cheias.", aggressiveDesc: "SONAR DE ALERTA: Emite pulsações ultrassônicas aceleradas para repelir intrusos.", ecologicalRole: "Superpredador de água doce. Equilibra populações de piranhas e peixes bagres.", conservationTip: "Evite a pesca ilegal e proteja os leitos dos rios da contaminação por mercúrio.", synthType: "sonar_agudo" },
+            { id: "PIRARUCU-04", name: "Pirarucu", scientific: "Arapaima gigas", habitat: "LAGOS E RIOS CALMOS", category: "rio", status: "Vulnerável", soundPower: 102.0, healthImpact: 91.8, sensitivity: 65, territoryCover: 75, emoji: "🐟", calmDesc: "Gigante das águas doces com respiração aérea obrigatória, atingindo mais de 200 kg.", aggressiveDesc: "GOLPE ACÚSTICO: Bate a cauda na superfície produzindo uma onda de choque defensiva.", ecologicalRole: "Principal predador dos lagos amazônicos mantendo a higienização das comunidades piscícolas.", conservationTip: "Consuma apenas pirarucu vindo do manejo sustentável comunitário certificado.", synthType: "baque_subaquatico" },
+            { id: "PEIXEBOI-11", name: "Peixe-Boi da Amazônia", scientific: "Trichechus inunguis", habitat: "LAGOS DE VÁRZEA", category: "rio", status: "Vulnerável", soundPower: 70.0, healthImpact: 95.0, sensitivity: 90, territoryCover: 82, emoji: "🦭", calmDesc: "Exclusivamente herbívoro aquático que consome diariamente grandes quantidades de plantas aquáticas.", aggressiveDesc: "SILVO SUBAQUÁTICO: Chamado agudo constante para localizar filhotes em perigo.", ecologicalRole: "Jardineiro dos rios. Suas fezes adubam o plâncton e limpam os canais de navegação.", conservationTip: "Reduza a velocidade de embarcações motorizadas em áreas de preservação.", synthType: "silvo_suave" },
+            { id: "JACARE-12", name: "Jacaré-Açu", scientific: "Melanosuchus niger", habitat: "MEANDROS E LAGOS", category: "rio", status: "Pouco Preocupante", soundPower: 112.0, healthImpact: 97.5, sensitivity: 70, territoryCover: 88, emoji: "🐊", calmDesc: "O maior crocodiliano da Amazônia com mais de 5 metros de comprimento.", aggressiveDesc: "RONCO INFRASSÔNICO: Faz a água vibrar ao redor do corpo emitindo urros graves.", ecologicalRole: "Topo de cadeia aquático. Nutre o fitoplâncton lagoano através da reciclagem de nutrientes.", conservationTip: "Coíba o comércio ilegal de peles e a caça de grandes reprodutores.", synthType: "urro_grave" },
+            { id: "ARIRANHA-13", name: "Ariranha", scientific: "Pteronura brasiliensis", habitat: "RIOS DE ÁGUA CRISTALINA", category: "rio", status: "Em Perigo", soundPower: 96.0, healthImpact: 93.0, sensitivity: 88, territoryCover: 85, emoji: "🦦", calmDesc: "Lutra gigante social que vive em grupos familiares altamente vocais e cooperativos.", aggressiveDesc: "GRITO DE DEFESA: Vocalização coletiva aguda e rítmica para expulsar jacarés.", ecologicalRole: "Predador apex dos rios fluviais. Controla peixes carnívoros e piranhas.", conservationTip: "Proteja as margens fluviais da poluição e do turismo desordenado.", synthType: "grito_agudo" },
+            { id: "PIRANHA-14", name: "Piranha-Caju", scientific: "Pygocentrus nattereri", habitat: "BACIAS E LAGOS", category: "rio", status: "Pouco Preocupante", soundPower: 65.0, healthImpact: 88.0, sensitivity: 60, territoryCover: 50, emoji: "🐠", calmDesc: "Peixe de mandíbulas poderosas e dentes afiados em forma de lâmina que caça em bandos.", aggressiveDesc: "ESTALIDO MANDIBULAR: Ruído seco de dentes batendo em sinal de ataque em bando.", ecologicalRole: "Sanitrizadora dos rios. Elimina animais doentes ou mortos mantendo a água limpa.", conservationTip: "Mantenha a qualidade da água e a vegetação ciliar para desova.", synthType: "estalido" },
+            { id: "TAMBAQUI-15", name: "Tambaqui", scientific: "Colossoma macropomum", habitat: "MATA INUNDADA (IGAPÓ)", category: "rio", status: "Quase Ameaçada", soundPower: 74.0, healthImpact: 94.2, sensitivity: 78, territoryCover: 80, emoji: "🐡", calmDesc: "Peixe frugívoro de dentes fortes capazes de quebrar castanhas duras que caem na água.", aggressiveDesc: "BORBULHO DEFENSIVO: Disparada rápida lançando bolhas e ressonância aquática.", ecologicalRole: "Dispersor essencial de sementes nas matas de igapó durante as cheias dos rios.", conservationTip: "Respeite os períodos do defeso para garantir a reprodução da espécie.", synthType: "baque_subaquatico" },
+            { id: "PORAQUE-16", name: "Poraquê (Enguia Elétrica)", scientific: "Electrophorus electricus", habitat: "RIOS DE FLUXO LENTO", category: "rio", status: "Pouco Preocupante", soundPower: 85.0, healthImpact: 90.0, sensitivity: 80, territoryCover: 45, emoji: "⚡", calmDesc: "Peixe capaz de gerar descargas elétricas de até 860 volts para caça e navegação.", aggressiveDesc: "PULSO ELÉTRICO: Rajada de alta voltagem que paralisa o agressor instantaneamente.", ecologicalRole: "Predador noturno que regula a fauna bentônica e pequenos peixes fluviais.", conservationTip: "Evite a degradação de igarapés e pequenos afluentes de águas calmas.", synthType: "zumbido_eletrico" },
+            { id: "ARRAIA-17", name: "Arraia-de-Fogo", scientific: "Potamotrygon motoro", habitat: "FUNDO DE RIOS ARENOSOS", category: "rio", status: "Pouco Preocupante", soundPower: 55.0, healthImpact: 87.0, sensitivity: 82, territoryCover: 40, emoji: "🪼", calmDesc: "Arraia de água doce camuflada no leito areia dos rios com espinho venenoso na cauda.", aggressiveDesc: "CHICOTADA DE CAUDA: Agitação de água e disparo do ferrão serrilhado.", ecologicalRole: "Bentófaga vital. Revolvendo o leito de areia libera nutrientes para micro-organismos.", conservationTip: "Evite a dragagem desordenada de leitos fluviais arenosos.", synthType: "silvo_suave" },
+            { id: "TUCUXI-18", name: "Boto-Tucuxi", scientific: "Sotalia fluviatilis", habitat: "CANAIS DE RIOS PRINCIPAIS", category: "rio", status: "Em Perigo", soundPower: 84.0, healthImpact: 91.0, sensitivity: 91, territoryCover: 85, emoji: "🐋", calmDesc: "Pequeno golfinho cinzento de água doce que executa saltos acrobáticos em águas abertas.", aggressiveDesc: "ESTALIDO DE SONAR: Cliques ultra-rápidos de ecolocalização e alarme.", ecologicalRole: "Predador de peixes pelágicos de médio porte nos grandes canais fluviais.", conservationTip: "Evite o uso de redes de malhadeira de fundo em canais de navegação.", synthType: "sonar_agudo" },
+
+            // --- DOSSEL (10) ---
+            { id: "HARPIA-03", name: "Harpia (Gavião-Real)", scientific: "Harpia harpyja", habitat: "DOSSEL DAS ÁRVORES", category: "dossel", status: "Vulnerável", soundPower: 95.0, healthImpact: 96.5, sensitivity: 85, territoryCover: 95, emoji: "🦅", calmDesc: "A maior ave de rapina das Américas com garras maiores que as de um urso pardo.", aggressiveDesc: "GRITO DE GUERRA: Piado estridente de alta frequência disparado em mergulho rasante.", ecologicalRole: "Predador de topo no dossel. Controla mamíferos arborícolas como preguiças e macacos.", conservationTip: "Preserve as árvores emergentes de grande porte essenciais para ninhos.", synthType: "ave_rapina" },
+            { id: "ARARA-19", name: "Arara-Vermelha", scientific: "Ara macao", habitat: "TOPO DE COPEIRAS", category: "dossel", status: "Pouco Preocupante", soundPower: 98.0, healthImpact: 96.0, sensitivity: 75, territoryCover: 88, emoji: "🦜", calmDesc: "Ave social monogâmica de cores vibrantes com bico potente para quebrar castanhas.", aggressiveDesc: "GRITO DE ALARME: Vocalização estridente e ensurdecedora em bando.", ecologicalRole: "Dispersora natural de sementes duras promovendo o reflorestamento do dossel.", conservationTip: "Combata o tráfico de animais silvestres e proteja ocos de nidificação.", synthType: "arara_estridente" },
+            { id: "PREGUICA-20", name: "Preguiça-de-Três-Dedos", scientific: "Bradypus tridactylus", habitat: "ALTAS COPEIRAS", category: "dossel", status: "Pouco Preocupante", soundPower: 52.0, healthImpact: 99.1, sensitivity: 92, territoryCover: 30, emoji: "🦥", calmDesc: "Mamífero de movimentos ultra-lentos com ecossistema próprio de algas em sua pelagem.", aggressiveDesc: "GOLPE DE GARRAS: Ergue as garras afiadas emitindo um assobio agudo nasal.", ecologicalRole: "Simbiose viva. Algas em seu pelo servem de camuflagem e alimento para mariposas.", conservationTip: "Evite redes elétricas expostas próximas a áreas florestais urbanas.", synthType: "assobio_lento" },
+            { id: "MACACO-ARANHA-21", name: "Macaco-Aranha", scientific: "Ateles chamek", habitat: "DOSSEL SUPERIOR", category: "dossel", status: "Em Perigo", soundPower: 89.0, healthImpact: 94.5, sensitivity: 89, territoryCover: 82, emoji: "🐒", calmDesc: "Possui cauda preênsil que funciona como quinto membro para acrobacias a 30m de altura.", aggressiveDesc: "RELINCHO DE ALERTA: Emite sons parecidos com relinchos para avisar sobre predadores.", ecologicalRole: "Um dos principais dispersores de sementes grandes de árvores nobres da Amazônia.", conservationTip: "Proteja os trechos contínuos de floresta primária sem interrupção de copa.", synthType: "grito_agudo" },
+            { id: "TUCANO-22", name: "Tucano-Toco", scientific: "Ramphastos toco", habitat: "COPAS E BORDAS DE MATA", category: "dossel", status: "Pouco Preocupante", soundPower: 82.0, healthImpact: 92.0, sensitivity: 70, territoryCover: 65, emoji: "🦤", calmDesc: "Possui bico gigante e leve usado para alcançar frutos distantes e regulação térmica.", aggressiveDesc: "COAXAR METÁLICO: Som rouco repetitivo parecendo um coaxar vindo do topo das árvores.", ecologicalRole: "Dispersor de frutos da flora amazônica e consumidor de pequenos invertebrados.", conservationTip: "Mantenha árvores frutíferas nativas em áreas de recomposição ambiental.", synthType: "rouco_metalico" },
+            { id: "GAVIAO-23", name: "Gavião-Pomba", scientific: "Pseudastur albicollis", habitat: "DOSSEL MEDIANO", category: "dossel", status: "Pouco Preocupante", soundPower: 91.0, healthImpact: 93.2, sensitivity: 80, territoryCover: 72, emoji: "🦅", calmDesc: "Raptor branco de asas pretas especializado em caçar répteis no topo das árvores.", aggressiveDesc: "PIADO PENETRANTE: Silvo agudo descendente de longa distância.", ecologicalRole: "Controle de cobras e lagartos que habitam os galhos superiores das árvores.", conservationTip: "Evite a caça indiscriminada de aves de rapina nativas.", synthType: "ave_rapina" },
+            { id: "UACARI-24", name: "Uacari-Branco", scientific: "Cacajao calvus", habitat: "DOSSEL DE IGAPÓ", category: "dossel", status: "Vulnerável", soundPower: 85.0, healthImpact: 95.0, sensitivity: 95, territoryCover: 60, emoji: "🐵", calmDesc: "Macaco de rosto vermelho vivo e cauda curta que habita exclusivamente matas alagadas.", aggressiveDesc: "GRITO DE DESAFIO: Vocalizações curtas e estridentes chacoalhando galhos secos.", ecologicalRole: "Especialista em quebrar sementes de frutos imaturos das florestas inundadas.", conservationTip: "Preserve integralmente as matas de várzea e igapós preservados.", synthType: "grito_agudo" },
+            { id: "SAUIM-25", name: "Sauim-de-Coleira", scientific: "Saguinus bicolor", habitat: "DOSSEL URBANO E FLORESTAL", category: "dossel", status: "Criticamente em Perigo", soundPower: 76.0, healthImpact: 98.0, sensitivity: 98, territoryCover: 25, emoji: "🐒", calmDesc: "Primata símbolo de Manaus com rosto calvo e manto branco no pescoço e ombros.", aggressiveDesc: "TRILHO DEFENSIVO: Chiado fino e rápido para mobilizar o grupo familiar.", ecologicalRole: "Dispersor de pequenas sementes e polinizador de flores de árvores tropicais.", conservationTip: "Crie pontes ecológicas urbanas para evitar atropelamentos da espécie.", synthType: "chiado_fino" },
+            { id: "SAGUI-26", name: "Sagui-Imperador", scientific: "Saguinus imperator", habitat: "DOSSEL BAIXO", category: "dossel", status: "Pouco Preocupante", soundPower: 70.0, healthImpact: 90.0, sensitivity: 84, territoryCover: 45, emoji: "🐒", calmDesc: "Pequeno primata famoso por seu longo bigode branco estilo imperial.", aggressiveDesc: "PIADO DE ALARME: Sons parecidos com passarinhos para enganar ameaças.", ecologicalRole: "Consumidor de seiva e néctar, ajudando na polinização de trepadeiras.", conservationTip: "Evite a introdução de espécies exóticas de primatas no bioma.", synthType: "chiado_fino" },
+            { id: "JIBOIA-27", name: "Jibóia-Constritora", scientific: "Boa constrictor", habitat: "GALHOS ALTOS E TRONCOS", category: "dossel", status: "Pouco Preocupante", soundPower: 65.0, healthImpact: 89.0, sensitivity: 72, territoryCover: 50, emoji: "🐍", calmDesc: "Serpente não peçonhenta que caça por constrição, camuflada entre folhas e galhos.", aggressiveDesc: "BUFO CONSTRITOR: Expulsão violenta de ar gerando um silvo assustador.", ecologicalRole: "Controle populacional de roedores e aves de médio porte nos galhos.", conservationTip: "Combata a captura ilegal para o comércio de animais de estimação.", synthType: "silvo_serpente" },
+
+            // --- SERAPILHEIRA (10) ---
+            { id: "SAPO-06", name: "Sapo-Venenoso (Dendrobates)", scientific: "Dendrobates tinctorius", habitat: "SERAPILHEIRA ÚMIDA", category: "serapilheira", status: "Pouco Preocupante", soundPower: 65.0, healthImpact: 97.2, sensitivity: 96, territoryCover: 15, emoji: "🐸", calmDesc: "Pequeno anfíbio aposemático com cores vibrantes indicando potente neurotoxina cutânea.", aggressiveDesc: "COAXAR TERRITORIAL: Vibrações sonoras em alta frequência para repelir rivais.", ecologicalRole: "Bioindicador supremo da qualidade do ar, umidade e saúde da serapilheira.", conservationTip: "Combata o desmatamento da folhada rasteira e a poluição de agrotóxicos.", synthType: "coaxar_agudo" },
+            { id: "SUCURI-07", name: "Sucuri-Verde", scientific: "Eunectes murinus", habitat: "SERAPILHEIRA E MARGENS", category: "serapilheira", status: "Pouco Preocupante", soundPower: 78.0, healthImpact: 89.0, sensitivity: 75, territoryCover: 80, emoji: "🐍", calmDesc: "A maior serpente do mundo em massa corporal, adaptada à caça em solos úmidos e água.", aggressiveDesc: "SILVO DE PRESSÃO: Expulsa o ar dos pulmões com ruído audível a grande distância.", ecologicalRole: "Regula grandes roedores aquáticos e répteis mantendo o ecossistema limpo.", conservationTip: "Proteja as matas ciliares e brejos onde a serpente se reproduz.", synthType: "silvo_serpente" },
+            { id: "JARARACA-28", name: "Jararaca-da-Amazônia", scientific: "Bothrops atrox", habitat: "FOLHADA DO SOLO", category: "serapilheira", status: "Pouco Preocupante", soundPower: 60.0, healthImpact: 88.5, sensitivity: 80, territoryCover: 35, emoji: "🐍", calmDesc: "Serpente peçonhenta com camuflagem perfeita imitando folhas secas de serapilheira.", aggressiveDesc: "BATE-CAUDA: Vibra a cauda contra as folhas secas produzindo um chocalho de aviso.", ecologicalRole: "Predadora essencial de roedores silvestres no solo da floresta.", conservationTip: "Use calçados de proteção ao caminhar em trilhas sem agredir o animal.", synthType: "chocalho_seco" },
+            { id: "JABUTI-29", name: "Jabuti-Tinga", scientific: "Chelonoidis denticulatus", habitat: "CHÃO DA FLORESTA", category: "serapilheira", status: "Vulnerável", soundPower: 50.0, healthImpact: 92.0, sensitivity: 65, territoryCover: 40, emoji: "🐢", calmDesc: "Reptil terrestre de casco pesado que caminha vagarosamente se alimentando de frutos caindo.", aggressiveDesc: "RECOLHIMENTO CASCO: Silvo curto ao puxar a cabeça e patas para dentro da carapaça.", ecologicalRole: "Regenerador florestal. Suas fezes carregam sementes germináveis por todo o chão.", conservationTip: "Evite o consumo ilegal da carne e o tráfico do animal.", synthType: "silvo_suave" },
+            { id: "ESCOLOPENDRA-30", name: "Centopeia-Gigante", scientific: "Scolopendra gigantea", habitat: "DEBAIXO DE TRONCOS RECONSTITUÍDOS", category: "serapilheira", status: "Pouco Preocupante", soundPower: 45.0, healthImpact: 85.0, sensitivity: 90, territoryCover: 10, emoji: "🐛", calmDesc: "Invertebrado predador gigante com garras de veneno capaz de capturar pequenos répteis.", aggressiveDesc: "ESTALIDO DE QUELÍCERA: Ruído crocante de pinças se abrindo na escuridão.", ecologicalRole: "Decompositora e predadora de topo da micro-fauna de serapilheira.", conservationTip: "Mantenha troncos caídos em decomposição na floresta natural.", synthType: "crocante_invertebrado" },
+            { id: "TUCANDEIRA-31", name: "Formiga-Tucandeira", scientific: "Paraponera clavata", habitat: "RAÍZES E SERAPILHEIRA", category: "serapilheira", status: "Pouco Preocupante", soundPower: 40.0, healthImpact: 96.0, sensitivity: 88, territoryCover: 12, emoji: "🐜", calmDesc: "Formiga gigante cuja ferrada é considerada a mais dolorosa do mundo animal.", aggressiveDesc: "ESTRIDULAÇÃO DE AVISO: Raspado audível do abdômen indicando ataque iminente.", ecologicalRole: "Predadora voraz de lagartas e pragas foliares no nível do solo.", conservationTip: "Preserve o ecossistema de solo sem contaminação química.", synthType: "estridulacao" },
+            { id: "HERCULES-32", name: "Besouro-Hércules", scientific: "Dynastes hercules", habitat: "MADEIRA EM DECOMPOSIÇÃO", category: "serapilheira", status: "Pouco Preocupante", soundPower: 55.0, healthImpact: 94.0, sensitivity: 70, territoryCover: 18, emoji: "🪲", calmDesc: "Um dos maiores besouros do mundo com chifres capazes de levantar 850 vezes seu peso.", aggressiveDesc: "CHIADO DE CHIFRE: Atrito das peças bucais criando um chiado grave.", ecologicalRole: "Suas larvas roem madeira podre transformando troncos caídos em adubo orgânico.", conservationTip: "Não remova madeira morta da floresta nativa.", synthType: "crocante_invertebrado" },
+            { id: "ARANHA-GOLIAS-33", name: "Aranha-Golias-Comedora-de-Pássaros", scientific: "Theraphosa blondi", habitat: "BURACOS NO SOLO", category: "serapilheira", status: "Pouco Preocupante", soundPower: 58.0, healthImpact: 93.0, sensitivity: 95, territoryCover: 15, emoji: "🕷️", calmDesc: "A maior tarântula do mundo em massa corporal que habita fundas de raízes.", aggressiveDesc: "ESTRIDULAÇÃO DE CERDAS: Raspa as patas traseiras soltando pelos urticantes com chiado.", ecologicalRole: "Predadora de pequenos roedores, sapos e insetos rastejantes.", conservationTip: "Evite o desmatamento da camada superficial do solo úmido.", synthType: "estridulacao" },
+            { id: "ESCORPIAO-34", name: "Escorpião-Preto-da-Amazônia", scientific: "Tityus metuendus", habitat: "DEBAIXO DE CORTEXAS", category: "serapilheira", status: "Pouco Preocupante", soundPower: 38.0, healthImpact: 86.0, sensitivity: 92, territoryCover: 8, emoji: "🦂", calmDesc: "Escorpião peçonhento de cor escura que caça à noite na folhada seca do chão.", aggressiveDesc: "GOLPE DE AGUILHÃO: Estalido rápido de pinças prontas para picada.", ecologicalRole: "Controle de baratas silvestres e grilos na camada do solo.", conservationTip: "Preserve a umidade natural do chão das matas preservadas.", synthType: "crocante_invertebrado" },
+            { id: "CAMALEAO-35", name: "Falso-Camaleão-da-Amazônia", scientific: "Polychrus marmoratus", habitat: "ARBUSTOS RASTEIROS", category: "serapilheira", status: "Pouco Preocupante", soundPower: 42.0, healthImpact: 90.0, sensitivity: 80, territoryCover: 22, emoji: "🦎", calmDesc: "Lagarto de movimentos ultra-lentos com capacidade de mudar de cor para camuflagem.", aggressiveDesc: "INFLAÇÃO DE PAPO: Expande a garganta colorida emitindo um sibilado fino.", ecologicalRole: "Predador de pequenos insetos e dispersor de pequenas bagas rasteiras.", conservationTip: "Evite a introdução de predadores domésticos como gatos em matas.", synthType: "silvo_suave" }
+        ];
+
+        // --- ESTADO GLOBAL DA APLICAÇÃO ---
+        let currentIndex = 0;
+        let isAggressiveMode = false;
+        let isAudioMuted = false;
+        let isTourRunning = false;
+        let isEcosystemFloatingMode = false;
+        let tourTimer = null;
+        let floatingAnimationId = null;
+        let floatingAnimals = [];
+        let favoritesList = JSON.parse(localStorage.getItem('amazonia_favs') || '[]');
+        let currentFilter = 'all';
+        let speechSynth = window.speechSynthesis || null;
+        let audioCtx = null;
+
+        // --- MOTOR DE ÁUDIO PROCEDURAL EXCLUSIVO VIA WEB AUDIO API ---
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSpecimenSound(synthType, isAggressive) {
+            if (isAudioMuted) return;
+            
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                const masterGain = ctx.createGain();
+                masterGain.gain.setValueAtTime(isAggressive ? 0.35 : 0.20, now);
+                masterGain.connect(ctx.destination);
+
+                switch (synthType) {
+                    case 'felino_grande':
+                    case 'felino_medio':
+                        const osc1 = ctx.createOscillator();
+                        const mod = ctx.createOscillator();
+                        const modGain = ctx.createGain();
+                        const filter1 = ctx.createBiquadFilter();
+
+                        osc1.type = 'sawtooth';
+                        osc1.frequency.setValueAtTime(isAggressive ? 120 : 85, now);
+                        osc1.frequency.exponentialRampToValueAtTime(35, now + 0.9);
+
+                        mod.type = 'sine';
+                        mod.frequency.setValueAtTime(45, now);
+                        modGain.gain.setValueAtTime(80, now);
+                        mod.connect(osc1.frequency);
+
+                        filter1.type = 'lowpass';
+                        filter1.frequency.setValueAtTime(320, now);
+                        filter1.frequency.linearRampToValueAtTime(80, now + 0.9);
+
+                        osc1.connect(filter1);
+                        filter1.connect(masterGain);
+
+                        mod.start(now); osc1.start(now);
+                        mod.stop(now + 0.9); osc1.stop(now + 0.9);
+                        break;
+
+                    case 'sonar_agudo':
+                        for (let i = 0; i < (isAggressive ? 8 : 4); i++) {
+                            const clickTime = now + (i * 0.06);
+                            const clickOsc = ctx.createOscillator();
+                            const clickGain = ctx.createGain();
+                            clickOsc.type = 'sine';
+                            clickOsc.frequency.setValueAtTime(2400 + (i * 150), clickTime);
+                            clickGain.gain.setValueAtTime(0.2, clickTime);
+                            clickGain.exponentialRampToValueAtTime(0.001, clickTime + 0.03);
+
+                            clickOsc.connect(clickGain);
+                            clickGain.connect(masterGain);
+                            clickOsc.start(clickTime);
+                            clickOsc.stop(clickTime + 0.03);
+                        }
+                        break;
+
+                    case 'ave_rapina':
+                    case 'arara_estridente':
+                        const birdOsc = ctx.createOscillator();
+                        const birdGain = ctx.createGain();
+                        birdOsc.type = 'triangle';
+                        birdOsc.frequency.setValueAtTime(isAggressive ? 1800 : 1300, now);
+                        birdOsc.frequency.exponentialRampToValueAtTime(isAggressive ? 600 : 900, now + 0.4);
+
+                        birdGain.gain.setValueAtTime(0.3, now);
+                        birdGain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+                        birdOsc.connect(birdGain);
+                        birdGain.connect(masterGain);
+                        birdOsc.start(now); birdOsc.stop(now + 0.4);
+                        break;
+
+                    case 'silvo_serpente':
+                    case 'estridulacao':
+                        const bufferSize = ctx.sampleRate * (isAggressive ? 0.8 : 0.4);
+                        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                        const output = buffer.getChannelData(0);
+                        for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
+
+                        const whiteNoise = ctx.createBufferSource();
+                        whiteNoise.buffer = buffer;
+                        const filterNoise = ctx.createBiquadFilter();
+                        filterNoise.type = 'bandpass';
+                        filterNoise.frequency.setValueAtTime(isAggressive ? 3500 : 2200, now);
+                        filterNoise.Q.setValueAtTime(3.0, now);
+
+                        whiteNoise.connect(filterNoise);
+                        filterNoise.connect(masterGain);
+                        whiteNoise.start(now); whiteNoise.stop(now + (isAggressive ? 0.8 : 0.4));
+                        break;
+
+                    case 'urro_grave':
+                    case 'baque_subaquatico':
+                        const lowOsc = ctx.createOscillator();
+                        const lowGain = ctx.createGain();
+                        lowOsc.type = 'sine';
+                        lowOsc.frequency.setValueAtTime(60, now);
+                        lowOsc.frequency.linearRampToValueAtTime(25, now + 0.7);
+
+                        lowGain.gain.setValueAtTime(0.4, now);
+                        lowGain.gain.linearRampToValueAtTime(0.01, now + 0.7);
+
+                        lowOsc.connect(lowGain);
+                        lowGain.connect(masterGain);
+                        lowOsc.start(now); lowOsc.stop(now + 0.7);
+                        break;
+
+                    case 'coaxar_agudo':
+                        const frogOsc = ctx.createOscillator();
+                        const frogGain = ctx.createGain();
+                        frogOsc.type = 'square';
+                        frogOsc.frequency.setValueAtTime(isAggressive ? 520 : 380, now);
+                        frogGain.gain.setValueAtTime(0.15, now);
+                        frogGain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+                        frogOsc.connect(frogGain);
+                        frogGain.connect(masterGain);
+                        frogOsc.start(now); frogOsc.stop(now + 0.25);
+                        break;
+
+                    case 'zumbido_eletrico':
+                        const elecOsc = ctx.createOscillator();
+                        elecOsc.type = 'sawtooth';
+                        elecOsc.frequency.setValueAtTime(120, now);
+                        masterGain.gain.setValueAtTime(0.3, now);
+                        masterGain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                        elecOsc.connect(masterGain);
+                        elecOsc.start(now); elecOsc.stop(now + 0.5);
+                        break;
+
+                    default:
+                        const genOsc = ctx.createOscillator();
+                        genOsc.type = 'sine';
+                        genOsc.frequency.setValueAtTime(220, now);
+                        genOsc.frequency.exponentialRampToValueAtTime(110, now + 0.3);
+                        masterGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                        genOsc.connect(masterGain);
+                        genOsc.start(now); genOsc.stop(now + 0.3);
+                        break;
+                }
+            } catch (e) {
+                console.warn("Web Audio Context:", e);
+            }
+        }
+
+        // --- ELEMENTOS DO DOM ---
+        const animalListEl = document.getElementById('animal-list');
+        const totalAnimalsCountEl = document.getElementById('total-animals-count');
+        const specimenIdBadge = document.getElementById('specimen-id-badge');
+        const specimenStatusBadge = document.getElementById('specimen-status-badge');
+        const specimenName = document.getElementById('specimen-name');
+        const specimenScientific = document.getElementById('specimen-scientific');
+        const specimenDesc = document.getElementById('specimen-desc');
+        const animalEmojiGlyph = document.getElementById('animal-emoji-glyph');
+        const ecologicalRoleBox = document.getElementById('ecological-role-box');
+        const conservationTip = document.getElementById('conservation-tip');
+        const telemetrySoundPower = document.getElementById('telemetry-sound-power');
+        const telemetryHealth = document.getElementById('telemetry-health');
+        const barSound = document.getElementById('bar-sound');
+        const barHealth = document.getElementById('bar-health');
+        const statusTag = document.getElementById('status-tag');
+        const attackCountdown = document.getElementById('attack-countdown');
+        const chamberContainer = document.getElementById('chamber-container');
+        const scannerBeam = document.getElementById('scanner-beam');
+        const animalAvatarContainer = document.getElementById('animal-avatar-container');
+        const actionTriggerBtn = document.getElementById('action-trigger-btn');
+        const tagInstructionText = document.getElementById('tag-instruction-text');
+        const guideProgress = document.getElementById('guide-progress');
+        const tourBtn = document.getElementById('tour-btn');
+        const tourBtnText = document.getElementById('tour-btn-text');
+        const tourIcon = document.getElementById('tour-icon');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const readAloudBtn = document.getElementById('read-aloud-btn');
+        const audioToggleBtn = document.getElementById('audio-toggle-btn');
+        const audioIcon = document.getElementById('audio-icon');
+        const audioTxt = document.getElementById('audio-txt');
+        const searchInput = document.getElementById('search-input');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebarPanel = document.getElementById('sidebar-panel');
+        const portalGlow = document.getElementById('portal-glow');
+        const favToggleBtn = document.getElementById('fav-toggle-btn');
+        const statsFavCount = document.getElementById('stats-fav-count');
+        const openStatsBtn = document.getElementById('open-stats-btn');
+        const biomeStatsBar = document.getElementById('biome-stats-bar');
+        const openTelemetryModalBtn = document.getElementById('open-telemetry-modal-btn');
+        const telemetryModal = document.getElementById('telemetry-modal');
+        const closeTelemetryModalBtn = document.getElementById('close-telemetry-modal-btn');
+        const openCompareModalBtn = document.getElementById('open-compare-modal-btn');
+        const compareModal = document.getElementById('compare-modal');
+        const closeCompareModalBtn = document.getElementById('close-compare-modal-btn');
+        const compareSelect1 = document.getElementById('compare-select-1');
+        const compareSelect2 = document.getElementById('compare-select-2');
+        const compareCard1 = document.getElementById('compare-card-1');
+        const compareCard2 = document.getElementById('compare-card-2');
+        const toggleEcosystemModeBtn = document.getElementById('toggle-ecosystem-mode-btn');
+        const singleSpecimenView = document.getElementById('single-specimen-view');
+        const floatingEcosystemView = document.getElementById('floating-ecosystem-view');
+
+        // --- INICIALIZAÇÃO ---
+        function initApp() {
+            totalAnimalsCountEl.textContent = speciesData.length;
+            updateFavStats();
+            renderAnimalList(speciesData);
+            loadSpecimen(0);
+            setupEventListeners();
+            initParticlesCanvas();
+            populateCompareSelects();
+        }
+
+        // --- FILTRAGEM DE ESPÉCIMES ---
+        function getFilteredSpecies() {
+            const searchVal = searchInput.value.toLowerCase().trim();
+            return speciesData.filter(s => {
+                const matchesSearch = s.name.toLowerCase().includes(searchVal) ||
+                                     s.scientific.toLowerCase().includes(searchVal) ||
+                                     s.habitat.toLowerCase().includes(searchVal);
+                
+                let matchesCategory = true;
+                if (currentFilter === 'floresta') matchesCategory = (s.category === 'floresta');
+                else if (currentFilter === 'rio') matchesCategory = (s.category === 'rio');
+                else if (currentFilter === 'dossel') matchesCategory = (s.category === 'dossel');
+                else if (currentFilter === 'serapilheira') matchesCategory = (s.category === 'serapilheira');
+                else if (currentFilter === 'fav') matchesCategory = favoritesList.includes(s.id);
+
+                return matchesSearch && matchesCategory;
+            });
+        }
+
+        function renderAnimalList(list) {
+            animalListEl.innerHTML = '';
+
+            if (list.length === 0) {
+                animalListEl.innerHTML = `<div class="text-center py-6 text-xs text-slate-500 font-orbitron">Nenhum espécime encontrado nesta categoria.</div>`;
+                return;
+            }
+
+            list.forEach((item) => {
+                const globalIndex = speciesData.findIndex(s => s.id === item.id);
+                const isSelected = globalIndex === currentIndex && !isEcosystemFloatingMode;
+                const isFav = favoritesList.includes(item.id);
+
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-2.5 rounded-xl border transition-all duration-200 flex items-center justify-between group active:scale-98 ${
+                    isSelected 
+                        ? 'bg-cyan-950/90 border-holo-cyan text-white shadow-lg' 
+                        : 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:bg-slate-800/80 hover:border-slate-700'
+                }`;
+
+                btn.onclick = () => {
+                    if (isEcosystemFloatingMode) disableFloatingMode();
+                    selectSpecimen(globalIndex);
+                };
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl group-hover:scale-110 transition-transform">${item.emoji}</span>
+                        <div>
+                            <div class="font-orbitron font-bold text-xs tracking-wider flex items-center gap-1.5 ${isSelected ? 'text-holo-cyan' : 'text-slate-200'}">
+                                ${item.name}
+                                ${isFav ? '<i class="fa-solid fa-star text-[10px] text-amber-400"></i>' : ''}
+                            </div>
+                            <div class="text-[10px] font-rajdhani text-slate-400 italic">${item.scientific}</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-[10px] ${isSelected ? 'text-holo-cyan opacity-100' : 'text-slate-600 opacity-0 group-hover:opacity-100'} transition-opacity"></i>
+                `;
+
+                animalListEl.appendChild(btn);
+            });
+        }
+
+        // --- CARREGAR ESPÉCIME SELECIONADO ---
+        function loadSpecimen(index) {
+            currentIndex = index;
+            const current = speciesData[currentIndex];
+            isAggressiveMode = false;
+
+            if (speechSynth && speechSynth.speaking) speechSynth.cancel();
+
+            specimenIdBadge.textContent = `ID: ${current.id}`;
+            specimenStatusBadge.textContent = `HÁBITAT: ${current.habitat}`;
+            specimenName.textContent = current.name;
+            specimenScientific.textContent = `${current.scientific} // Amazonia`;
+            statusTag.textContent = current.status.toUpperCase();
+            
+            specimenDesc.textContent = current.calmDesc;
+            ecologicalRoleBox.textContent = current.ecologicalRole;
+            conservationTip.textContent = current.conservationTip;
+            animalEmojiGlyph.textContent = current.emoji;
+
+            const soundDb = current.soundPower;
+            telemetrySoundPower.textContent = `${soundDb.toFixed(1)} dB`;
+            barSound.style.width = `${Math.min(100, (soundDb / 120) * 100)}%`;
+
+            telemetryHealth.textContent = `${current.healthImpact.toFixed(1)}%`;
+            barHealth.style.width = `${current.healthImpact}%`;
+
+            guideProgress.textContent = `${currentIndex + 1} / ${speciesData.length}`;
+
+            updateFavButtonState();
+            applyModeStyles();
+            renderAnimalList(getFilteredSpecies());
+            playSpecimenSound(current.synthType, false);
+        }
+
+        function selectSpecimen(index) {
+            if (isTourRunning) stopTour();
+            loadSpecimen(index);
+        }
+
+        // --- MODO AGRESSIVO / ALERTA ---
+        function toggleAggressiveMode() {
+            isAggressiveMode = !isAggressiveMode;
+            const current = speciesData[currentIndex];
+
+            if (isAggressiveMode) {
+                specimenDesc.textContent = current.aggressiveDesc;
+                telemetrySoundPower.textContent = `${(current.soundPower + 14.2).toFixed(1)} dB`;
+                barSound.style.width = `${Math.min(100, ((current.soundPower + 14.2) / 120) * 100)}%`;
+                playSpecimenSound(current.synthType, true);
+            } else {
+                specimenDesc.textContent = current.calmDesc;
+                telemetrySoundPower.textContent = `${current.soundPower.toFixed(1)} dB`;
+                barSound.style.width = `${Math.min(100, (current.soundPower / 120) * 100)}%`;
+                playSpecimenSound(current.synthType, false);
+            }
+
+            applyModeStyles();
+        }
+
+        function applyModeStyles() {
+            if (isAggressiveMode) {
+                attackCountdown.className = "text-xs font-orbitron text-rose-400 mb-3 text-center bg-rose-950/40 py-2 rounded-xl border border-rose-500/50 transition-all duration-300 shadow-inner flex items-center justify-center gap-2";
+                attackCountdown.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span> <span>MODO DEFESA / ALERTA</span>`;
+
+                chamberContainer.className = "w-full relative bg-gradient-to-b from-slate-950 via-rose-950/30 to-slate-950 border border-rose-500/50 rounded-3xl p-4 md:p-6 holo-glow-danger flex flex-col items-center justify-between min-h-[460px] md:min-h-[540px] overflow-hidden transition-all duration-500";
+                scannerBeam.className = "scanner-beam danger";
+                portalGlow.className = "absolute w-48 h-48 md:w-64 md:h-64 rounded-full bg-rose-500/20 blur-2xl transition-all duration-500 pointer-events-none";
+
+                animalAvatarContainer.className = "avatar-aggressive text-8xl md:text-9xl transition-all duration-300 drop-shadow-[0_0_35px_rgba(244,63,94,0.8)] my-2";
+                tagInstructionText.textContent = "RETORNAR AO MODO CALMO";
+            } else {
+                attackCountdown.className = "text-xs font-orbitron text-emerald-400 mb-3 text-center bg-slate-900/90 py-2 rounded-xl border border-emerald-500/30 transition-all duration-300 shadow-inner flex items-center justify-center gap-2";
+                attackCountdown.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> <span>MODO CALMO ATIVO</span>`;
+
+                chamberContainer.className = "w-full relative bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-cyan-950/40 border border-holo-border rounded-3xl p-4 md:p-6 holo-glow flex flex-col items-center justify-between min-h-[460px] md:min-h-[540px] overflow-hidden transition-all duration-500";
+                scannerBeam.className = "scanner-beam";
+                portalGlow.className = "absolute w-48 h-48 md:w-64 md:h-64 rounded-full bg-holo-cyan/10 blur-2xl transition-all duration-500 pointer-events-none";
+
+                animalAvatarContainer.className = "avatar-float text-8xl md:text-9xl transition-all duration-300 drop-shadow-[0_0_25px_rgba(0,242,254,0.5)] my-2";
+                tagInstructionText.textContent = "TOQUE PARA MODO DEFESA / ALERTA";
+            }
+        }
+
+        // --- ECOSSISTEMA VIVO FLUTUANTE (CATEGORIA "TODOS") ---
+        function enableFloatingMode() {
+            isEcosystemFloatingMode = true;
+            singleSpecimenView.classList.add('hidden');
+            floatingEcosystemView.classList.remove('hidden');
+            toggleEcosystemModeBtn.innerHTML = `<i class="fa-solid fa-xmark"></i> FECHAR ECOSSISTEMA`;
+            toggleEcosystemModeBtn.className = "bg-rose-950 border border-rose-500 text-rose-300 px-3 py-1 rounded-full font-bold hover:bg-rose-500 hover:text-white transition-all shadow active:scale-95";
+
+            floatingEcosystemView.innerHTML = '';
+            const rect = floatingEcosystemView.getBoundingClientRect();
+            const width = rect.width || 380;
+            const height = rect.height || 260;
+
+            floatingAnimals = speciesData.map((item, idx) => {
+                const el = document.createElement('div');
+                el.className = 'absolute cursor-pointer select-none transition-transform hover:scale-125 flex flex-col items-center z-10';
+                el.innerHTML = `
+                    <span class="text-3xl filter drop-shadow-[0_0_10px_rgba(0,242,254,0.6)]">${item.emoji}</span>
+                    <span class="text-[8px] font-orbitron bg-slate-950/90 text-holo-cyan px-1.5 py-0.5 rounded border border-cyan-800/80 font-bold tracking-tighter whitespace-nowrap">${item.category.toUpperCase()}</span>
+                `;
+                
+                el.onclick = () => {
+                    disableFloatingMode();
+                    selectSpecimen(idx);
+                };
+
+                floatingEcosystemView.appendChild(el);
+
+                return {
+                    el: el,
+                    x: Math.random() * (width - 40),
+                    y: Math.random() * (height - 40),
+                    vx: (Math.random() - 0.5) * 1.5,
+                    vy: (Math.random() - 0.5) * 1.5
+                };
+            });
+
+            animateFloatingEcosystem();
+        }
+
+        function disableFloatingMode() {
+            isEcosystemFloatingMode = false;
+            if (floatingAnimationId) cancelAnimationFrame(floatingAnimationId);
+            floatingEcosystemView.classList.add('hidden');
+            singleSpecimenView.classList.remove('hidden');
+            toggleEcosystemModeBtn.innerHTML = `<i class="fa-solid fa-cubes-stacked"></i> ECOSSISTEMA VIVO`;
+            toggleEcosystemModeBtn.className = "bg-purple-950 border border-holo-purple text-holo-purple px-3 py-1 rounded-full font-bold hover:bg-holo-purple hover:text-white transition-all shadow active:scale-95";
+        }
+
+        function animateFloatingEcosystem() {
+            if (!isEcosystemFloatingMode) return;
+            const rect = floatingEcosystemView.getBoundingClientRect();
+            const width = rect.width || 380;
+            const height = rect.height || 260;
+
+            floatingAnimals.forEach(item => {
+                item.x += item.vx;
+                item.y += item.vy;
+
+                if (item.x <= 0 || item.x >= width - 40) item.vx *= -1;
+                if (item.y <= 0 || item.y >= height - 40) item.vy *= -1;
+
+                item.el.style.transform = `translate(${item.x}px, ${item.y}px)`;
+            });
+
+            floatingAnimationId = requestAnimationFrame(animateFloatingEcosystem);
+        }
+
+        // --- SISTEMA DE FAVORITOS ---
+        function updateFavButtonState() {
+            const current = speciesData[currentIndex];
+            const isFav = favoritesList.includes(current.id);
+            if (isFav) {
+                favToggleBtn.className = "p-2 rounded-full bg-amber-500/20 border border-amber-400 text-amber-400 shadow";
+            } else {
+                favToggleBtn.className = "p-2 rounded-full bg-slate-950/90 border border-amber-500/50 text-slate-500 hover:text-amber-400 transition-colors shadow";
+            }
+        }
+
+        function toggleFavorite() {
+            const current = speciesData[currentIndex];
+            const idx = favoritesList.indexOf(current.id);
+            if (idx >= 0) {
+                favoritesList.splice(idx, 1);
+            } else {
+                favoritesList.push(current.id);
+            }
+            localStorage.setItem('amazonia_favs', JSON.stringify(favoritesList));
+            updateFavButtonState();
+            updateFavStats();
+            renderAnimalList(getFilteredSpecies());
+        }
+
+        function updateFavStats() {
+            statsFavCount.textContent = favoritesList.length;
+        }
+
+        // --- TOUR GUIADO AUTOMÁTICO ---
+        function toggleTour() {
+            if (isTourRunning) stopTour();
+            else startTour();
+        }
+
+        function startTour() {
+            isTourRunning = true;
+            tourBtnText.textContent = "PAUSAR VISITA GUIADA";
+            tourIcon.className = "fa-solid fa-pause text-xs";
+            tourBtn.className = "w-full py-2 bg-amber-500 border border-amber-400 text-slate-950 hover:bg-amber-400 rounded-xl font-orbitron text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95";
+
+            readAloud();
+            tourTimer = setInterval(() => {
+                let nextIdx = (currentIndex + 1) % speciesData.length;
+                loadSpecimen(nextIdx);
+                readAloud();
+            }, 9500);
+        }
+
+        function stopTour() {
+            isTourRunning = false;
+            clearInterval(tourTimer);
+            tourBtnText.textContent = "INICIAR VISITA GUIADA";
+            tourIcon.className = "fa-solid fa-play text-xs";
+            tourBtn.className = "w-full py-2 bg-cyan-950 border border-holo-cyan text-holo-cyan hover:bg-holo-cyan hover:text-slate-950 rounded-xl font-orbitron text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-md active:scale-95";
+            if (speechSynth && speechSynth.speaking) speechSynth.cancel();
+        }
+
+        // --- SÍNTESE DE VOZ (TEXT-TO-SPEECH) ---
+        function readAloud() {
+            if (!speechSynth) return;
+            if (speechSynth.speaking) speechSynth.cancel();
+
+            const current = speciesData[currentIndex];
+            const textToSpeak = `${current.name}. Hábitat: ${current.habitat}. ${current.calmDesc} Papel ecológico: ${current.ecologicalRole}`;
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1.0;
+
+            speechSynth.speak(utterance);
+        }
+
+        // --- MODAL DE COMPARATIVO ---
+        function populateCompareSelects() {
+            compareSelect1.innerHTML = '';
+            compareSelect2.innerHTML = '';
+            speciesData.forEach((s, idx) => {
+                const opt1 = document.createElement('option');
+                opt1.value = idx;
+                opt1.textContent = `${s.emoji} ${s.name}`;
+                compareSelect1.appendChild(opt1);
+
+                const opt2 = document.createElement('option');
+                opt2.value = idx;
+                opt2.textContent = `${s.emoji} ${s.name}`;
+                compareSelect2.appendChild(opt2);
+            });
+
+            compareSelect1.value = 0;
+            compareSelect2.value = 1;
+            renderCompareCards();
+        }
+
+        function renderCompareCards() {
+            const s1 = speciesData[compareSelect1.value];
+            const s2 = speciesData[compareSelect2.value];
+
+            compareCard1.innerHTML = `
+                <div class="text-center text-4xl my-2">${s1.emoji}</div>
+                <div class="font-bold text-holo-cyan text-sm">${s1.name}</div>
+                <div class="text-[10px] text-slate-400 italic mb-2">${s1.scientific}</div>
+                <div><strong class="text-slate-200">Hábitat:</strong> ${s1.habitat}</div>
+                <div><strong class="text-slate-200">Status:</strong> ${s1.status}</div>
+                <div><strong class="text-slate-200">Pressão Sonora:</strong> ${s1.soundPower} dB</div>
+                <div><strong class="text-slate-200">Saúde Ecossistêmica:</strong> ${s1.healthImpact}%</div>
+                <div class="mt-2 text-[11px] leading-relaxed text-slate-300 bg-slate-900 p-2 rounded">${s1.ecologicalRole}</div>
+            `;
+
+            compareCard2.innerHTML = `
+                <div class="text-center text-4xl my-2">${s2.emoji}</div>
+                <div class="font-bold text-holo-amber text-sm">${s2.name}</div>
+                <div class="text-[10px] text-slate-400 italic mb-2">${s2.scientific}</div>
+                <div><strong class="text-slate-200">Hábitat:</strong> ${s2.habitat}</div>
+                <div><strong class="text-slate-200">Status:</strong> ${s2.status}</div>
+                <div><strong class="text-slate-200">Pressão Sonora:</strong> ${s2.soundPower} dB</div>
+                <div><strong class="text-slate-200">Saúde Ecossistêmica:</strong> ${s2.healthImpact}%</div>
+                <div class="mt-2 text-[11px] leading-relaxed text-slate-300 bg-slate-900 p-2 rounded">${s2.ecologicalRole}</div>
+            `;
+        }
+
+        // --- MODAL DE RAIO-X TELEMETRIA ---
+        function openTelemetryModal() {
+            const current = speciesData[currentIndex];
+            document.getElementById('telemetry-modal-subtitle').textContent = `Análise Vetorial: ${current.name} (${current.id})`;
+            
+            const grid = document.getElementById('telemetry-metrics-grid');
+            grid.innerHTML = `
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <div class="text-xs text-slate-400 mb-1">SENSIBILIDADE AMBIENTAL</div>
+                    <div class="text-holo-cyan font-bold font-orbitron text-base mb-1">${current.sensitivity} / 100</div>
+                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                        <div class="bg-holo-cyan h-2 rounded-full" style="width: ${current.sensitivity}%"></div>
+                    </div>
+                </div>
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <div class="text-xs text-slate-400 mb-1">COBERTURA TERRITORIAL</div>
+                    <div class="text-holo-emerald font-bold font-orbitron text-base mb-1">${current.territoryCover}%</div>
+                    <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                        <div class="bg-holo-emerald h-2 rounded-full" style="width: ${current.territoryCover}%"></div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('telemetry-modal-diag').textContent = `O espécime ${current.name} apresenta estabilidade bioacústica de ${current.soundPower} dB. Nível de vulnerabilidade categorizado como ${current.status.toUpperCase()}.`;
+            telemetryModal.classList.remove('hidden');
+            telemetryModal.classList.add('flex');
+        }
+
+        // --- CANVAS DE PARTÍCULAS EM SEGUNDO PLANO ---
+        function initParticlesCanvas() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const particles = Array.from({ length: 45 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                speedY: -(Math.random() * 0.4 + 0.1),
+                opacity: Math.random() * 0.6 + 0.2
+            }));
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    if (p.y < 0) {
+                        p.y = canvas.height;
+                        p.x = Math.random() * canvas.width;
+                    }
+                    ctx.fillStyle = isAggressiveMode 
+                        ? `rgba(244, 63, 94, ${p.opacity})` 
+                        : `rgba(0, 242, 254, ${p.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+        }
+
+        // --- REGISTRO DE EVENT LISTENERS ---
+        function setupEventListeners() {
+            actionTriggerBtn.addEventListener('click', toggleAggressiveMode);
+            tourBtn.addEventListener('click', toggleTour);
+
+            prevBtn.addEventListener('click', () => {
+                if (isTourRunning) stopTour();
+                if (isEcosystemFloatingMode) disableFloatingMode();
+                let prevIdx = (currentIndex - 1 + speciesData.length) % speciesData.length;
+                loadSpecimen(prevIdx);
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (isTourRunning) stopTour();
+                if (isEcosystemFloatingMode) disableFloatingMode();
+                let nextIdx = (currentIndex + 1) % speciesData.length;
+                loadSpecimen(nextIdx);
+            });
+
+            readAloudBtn.addEventListener('click', readAloud);
+            favToggleBtn.addEventListener('click', toggleFavorite);
+
+            audioToggleBtn.addEventListener('click', () => {
+                isAudioMuted = !isAudioMuted;
+                if (isAudioMuted) {
+                    audioIcon.className = "fa-solid fa-volume-xmark text-sm text-holo-rose";
+                    audioTxt.textContent = "SOM: OFF";
+                    if (speechSynth && speechSynth.speaking) speechSynth.cancel();
+                } else {
+                    audioIcon.className = "fa-solid fa-volume-high text-sm text-holo-cyan";
+                    audioTxt.textContent = "SOM: ON";
+                }
+            });
+
+            searchInput.addEventListener('input', () => {
+                renderAnimalList(getFilteredSpecies());
+            });
+
+            // Filtros de Categoria
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.className = "filter-btn px-2 py-1 rounded-lg bg-slate-800 text-slate-300 hover:text-holo-cyan whitespace-nowrap";
+                    });
+                    e.target.className = "filter-btn px-2 py-1 rounded-lg bg-holo-cyan text-slate-950 font-bold whitespace-nowrap";
+                    currentFilter = e.target.getAttribute('data-filter');
+
+                    if (currentFilter === 'all') {
+                        toggleEcosystemModeBtn.classList.remove('hidden');
+                    } else {
+                        toggleEcosystemModeBtn.classList.add('hidden');
+                        if (isEcosystemFloatingMode) disableFloatingMode();
+                    }
+
+                    renderAnimalList(getFilteredSpecies());
+                });
+            });
+
+            toggleEcosystemModeBtn.addEventListener('click', () => {
+                if (isEcosystemFloatingMode) disableFloatingMode();
+                else enableFloatingMode();
+            });
+
+            openStatsBtn.addEventListener('click', () => {
+                biomeStatsBar.classList.toggle('hidden');
+            });
+
+            openTelemetryModalBtn.addEventListener('click', openTelemetryModal);
+            closeTelemetryModalBtn.addEventListener('click', () => {
+                telemetryModal.classList.add('hidden');
+                telemetryModal.classList.remove('flex');
+            });
+
+            openCompareModalBtn.addEventListener('click', () => {
+                compareModal.classList.remove('hidden');
+                compareModal.classList.add('flex');
+            });
+
+            closeCompareModalBtn.addEventListener('click', () => {
+                compareModal.classList.add('hidden');
+                compareModal.classList.remove('flex');
+            });
+
+            compareSelect1.addEventListener('change', renderCompareCards);
+            compareSelect2.addEventListener('change', renderCompareCards);
+
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebarPanel.classList.toggle('hidden');
+            });
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
